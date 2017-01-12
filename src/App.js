@@ -72,7 +72,7 @@ class App extends Component {
 
       todoElements.push(
         <div className="todo d-flex justify-content-between pb-4" key={todoId}>
-          <div className="mt-2">
+          <div className="mt-2" onClick={ () => this.selectTodo(todoId) }>
             <h4>{todo.title}</h4>
             <div>{moment(todo.createdAt).calendar()}</div>
           </div>
@@ -93,6 +93,7 @@ class App extends Component {
     );
   }
 
+
   deleteTodo(todoId) {
     axios({
       url: `/todos/${todoId}.json`,
@@ -107,6 +108,26 @@ class App extends Component {
     })
   }
 
+  slectTodo(todoId) {
+    this.setState({
+      currentTodo: todoId
+    })
+  }
+
+  renderSelectedTodo() {
+    let content;
+
+    if(this.state.currentTodo) {
+      let currentTodo = this.state.todos[this.state.currentTodo];
+      content = (
+        <div>
+        <h1>{currentTodo.title}</h1>
+        </div>
+      );
+    }
+    return content;
+  }
+
 
   render() {
     return (
@@ -115,6 +136,9 @@ class App extends Component {
           <div className="col-6 px-4">
             {this.renderNewTodoBox()}
             {this.renderTodoList()}
+          </div>
+          <div className="col-6 px-4">
+            {this.renderSelectedTodo()}
           </div>
         </div>
       </div>
